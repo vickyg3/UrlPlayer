@@ -1,0 +1,24 @@
+<html>
+<head>
+  <title>Example minimum receiver</title>
+  <script src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+</head>
+<body>
+  <video id='media'>
+    <track id="subtitle" kind="captions" src="" srclang="en" label="English" default>
+  </video>
+  <script>
+    window.onload = function() {
+      window.mediaElement = document.getElementById('media');
+      window.mediaManager = new cast.receiver.MediaManager(window.mediaElement);
+      window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+      window.castReceiverManager.start();
+      mediaManager['origOnLoad'] = mediaManager.onLoad;
+      mediaManager.onLoad = function (event) {
+        console.log(event);
+        mediaManager[‘origOnLoad’](event);
+      };
+    }
+  </script>
+</body>
+</html>
