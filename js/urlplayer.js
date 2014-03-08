@@ -9,12 +9,34 @@ function launchApp() {
   player.launchApp();
 }
 
+function getContentType(url) {
+  var ext = url.split('.').pop();
+  var formats = [
+    {ext: 'mkv', type: 'video'},
+    {ext: 'webm', type: 'video'},
+    {ext: 'mp4', type: 'video'},
+    {ext: 'jpeg', type: 'image'},
+    {ext: 'jpg', type: 'image'},
+    {ext: 'gif', type: 'image'},
+    {ext: 'png', type: 'image'},
+    {ext: 'bmp', type: 'image'},
+    {ext: 'webp', type: 'image'}
+  ];
+  for (var i = 0; i < formats.length; i++) {
+    if (formats[i].ext == ext) {
+      return formats[i].type + "/" + ext;
+    }
+  }
+  // it doesn't matter now, as it's unsupported.
+  return "";
+}
+
 function startPlayback() {
   if (player.session == null || $('#url').val().trim() == "") {
     return;
   }
   var url = decodeURIComponent($('#url').val());
-  var contentType = "video/" + url.split('.').pop();
+  var contentType = getContentType(url);
   player.loadMedia(url, contentType);
   $('#player_now_playing').html(url.split(/[\\/]/).pop());
   $('#controls').show();
