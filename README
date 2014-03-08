@@ -4,6 +4,9 @@ A simple web app to cast any video given it's URL to Chromecast.
 
 A hosted version can be found here: http://movies.foamsnet.com/url
 
+Pull Requests are welcome. All the code you submit will licensed the same way
+as the project itself. Look at the LICENSE file for more details.
+
 Credits:
     * Bootstrap
     * Google Chromecast Example Code
