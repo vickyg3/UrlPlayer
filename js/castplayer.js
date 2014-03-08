@@ -81,7 +81,7 @@ CastPlayer.prototype.initializeCastPlayer = function() {
 
   if (!chrome.cast || !chrome.cast.isAvailable) {
     if (this.tries++ > 10) {
-      $('#extension').html("Looks like you don't have the Chromecast Extension. Click here to Install it and then reload the page");
+      $('#extension').html("Looks like you don't have the Chromecast Extension. <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/google-cast/boadgeojelhgndaghljhdicfkmllpafd\">Click here to Install it</a> and then reload the page");
       return;
     }
     setTimeout(this.initializeCastPlayer.bind(this), 1000);
