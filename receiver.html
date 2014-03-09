@@ -13,11 +13,13 @@
       window.mediaManager = new cast.receiver.MediaManager(window.mediaElement);
       window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
       window.castReceiverManager.start();
+      /*
       mediaManager['origOnLoad'] = mediaManager.onLoad;
       mediaManager.onLoad = function (event) {
         console.log(event);
         mediaManager[‘origOnLoad’](event);
       };
+      */
     }
   </script>
 </body>
