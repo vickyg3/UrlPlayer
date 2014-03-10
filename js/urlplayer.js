@@ -43,15 +43,21 @@ function startPlayback() {
 }
 
 function pause() {
-  player.pauseMedia();
+  if (player.session != null) {
+    player.pauseMedia();
+  }
 }
 
 function resume() {
-  player.playMedia();
+  if (player.session != null) {
+    player.playMedia();
+  }
 }
 
 function seek(is_forward) {
-  player.seekMedia(parseInt($("#player_seek").val()), is_forward);
+  if (player.session != null) {
+    player.seekMedia(parseInt($("#player_seek").val()), is_forward);
+  }
 }
 
 function stop() {
@@ -59,5 +65,23 @@ function stop() {
   if (reply == true) {
     player.stopApp();
     $('#controls').hide();
+  }
+}
+
+function volumeDown() {
+  if (player.session != null) {
+      player.volumeControl(false, false);
+  }
+}
+
+function volumeUp() {
+  if (player.session != null) {
+    player.volumeControl(true, false);
+  }
+}
+
+function volumeMute() {
+  if (player.session != null) {
+    player.volumeControl(false, true);
   }
 }

@@ -42,6 +42,8 @@ var CastPlayer = function() {
   this.currentMediaSession = null;
   // @type {Number} volume
   this.currentVolume = 0.5;
+  // @type {Boolean} ismuted
+  this.isMuted = false;
   // @type {Boolean} A flag for autoplay after load
   this.autoplay = true;
   // @type {string} a chrome.cast.Session object
@@ -274,7 +276,7 @@ CastPlayer.prototype.onMediaDiscovered = function(how, mediaSession) {
   }
 
   if( how == 'activeSession' ) {
-    this.castPlayerState = this.session.media[0].playerState; 
+    this.castPlayerState = this.session.media[0].playerState;
     this.currentMediaTime = this.session.media[0].currentTime;
     this.currentMediaUrl = this.session.media[0].media.contentId;
     if ($('#url').val() == "") {
@@ -331,7 +333,7 @@ CastPlayer.prototype.onMediaStatusUpdate = function(e) {
  * Increment media current position by 1 second 
  */
 CastPlayer.prototype.incrementMediaTime = function() {
-  if( this.castPlayerState == PLAYER_STATE.PLAYING || this.localPlayerState == PLAYER_STATE.PLAYING ) {
+  if( this.castPlayerState == PLAYER_STATE.PLAYING) {
     if( this.currentMediaTime < this.currentMediaDuration ) {
       this.currentMediaTime += 1;
       $('#player_current_time').html(this.formatTime(this.currentMediaTime));
@@ -380,7 +382,6 @@ CastPlayer.prototype.playMedia = function() {
  */
 CastPlayer.prototype.pauseMedia = function() {
   if( !this.currentMediaSession ) {
-    this.pauseMediaLocally();
     return;
   }
 
@@ -416,7 +417,39 @@ CastPlayer.prototype.mediaCommandSuccessCallback = function(info, e) {
 };
 
 /**
- * media seek function in either Cast or local mode
+ * Control Volume
+ */
+CastPlayer.prototype.volumeControl = function(increase, mute) {
+  if( !this.currentMediaSession ) {
+    return;
+  }
+
+  if (!mute) {
+    if (increase) {
+      this.currentVolume += 0.1;
+    } else {
+      this.currentVolume -= 0.1;
+    }
+
+    if (this.currentVolume < 0) {
+      this.currentVolume = 0;
+    } else if (this.currentVolume > 1.0) {
+      this.currentVolume = 1.0;
+    }
+
+    this.session.setReceiverVolumeLevel(this.currentVolume,
+      this.mediaCommandSuccessCallback.bind(this),
+      this.onError.bind(this));
+  } else {
+    this.isMuted = !this.isMuted;
+    this.session.setReceiverMuted(this.isMuted,
+      this.mediaCommandSuccessCallback.bind(this),
+      this.onError.bind(this));
+  }
+};
+
+/**
+ * media seek function
  * @param {Event} e An event object from seek 
  */
 CastPlayer.prototype.seekMedia = function(minutes, is_forward) {

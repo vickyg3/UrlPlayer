@@ -4,6 +4,11 @@ A simple web app to cast any video given its URL to Chromecast.
 
 A hosted version can be found here: http://movies.foamsnet.com/url
 
+Features:
+    * Playback any supported video from the web.
+    * View any supported image from the web.
+    * Full fledged control of video playback, including Pause, Resume, Seek and Volume Control.
+
 Pull Requests are welcome. All the code you submit will licensed the same way
 as the project itself. Look at the LICENSE file for more details.
 
