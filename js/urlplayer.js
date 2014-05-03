@@ -15,6 +15,8 @@ function getContentType(url) {
     {ext: 'mkv', type: 'video'},
     {ext: 'webm', type: 'video'},
     {ext: 'mp4', type: 'video'},
+    {ext: 'm4v', type: 'video'},
+    {ext: 'm4a', type: 'audio'},
     {ext: 'jpeg', type: 'image'},
     {ext: 'jpg', type: 'image'},
     {ext: 'gif', type: 'image'},
