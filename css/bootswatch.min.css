@@ -146,3 +146,21 @@ footer p {
 .bsa .one .bsa_it_p {
     display: none;
 }
+
+input[type="range"] {
+    -webkit-appearance: none;
+    background-color: #ad1d28;
+    height: 15px;
+    width: 170px;
+    border-radius: 5px;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.6);
+    outline: none;
+} 
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width:20px;
+    height: 11px;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.6);
+}

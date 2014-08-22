@@ -62,6 +62,12 @@ function seek(is_forward) {
   }
 }
 
+function seekTo() {	
+  if (player.session != null) {
+    player.seekTo(parseInt($("#player_seek_range").val()));
+  }
+}
+
 function stop() {
   var reply = confirm("This will stop playback on the TV. Are you sure?");
   if (reply == true) {

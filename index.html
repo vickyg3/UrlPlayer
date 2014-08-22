@@ -48,17 +48,23 @@
       <br/>
       <div class="alert alert-info" style="text-align: center; display:none;" id="controls">
         Now playing <b id="player_now_playing"></b>
-        <br/><br/>
+        
+        <div style="margin: 15px auto; width: 75%; vertical-align: top;">
+        	<span id="player_current_time">00:00:00</span>
+			<input type="range" id="player_seek_range" onchange="seekTo();" name="points" value="1" min="1" max="10" val="1" style="display: inline-block; width: 50%; position: relative; top:2px; margin: 0 15px;">
+			<span id="player_duration">00:00:00</span>
+        </div>
+        
         <button onclick="pause();" class="btn btn-default">
           <span class="glyphicon glyphicon-pause"></span>
           Pause
-        </button> &nbsp;
+        </button>
         <button onclick="resume();" class="btn btn-default">
           <span class="glyphicon glyphicon-play"></span>
           Resume
-        </button> &nbsp; &nbsp;
-        <span id="player_current_time"></span> / 
-        <span id="player_duration"></span> &nbsp; &nbsp; &nbsp; &nbsp;
+        </button>
+        
+        <!--
         <button onclick="seek(false);" class="btn btn-default">
           <span class="glyphicon glyphicon-backward"></span>
           Backward
@@ -75,6 +81,7 @@
           <span class="glyphicon glyphicon-forward"></span>
           Forward
         </button> &nbsp; 
+        -->
         <button onclick="stop();" class="btn btn-default">
           <span class="glyphicon glyphicon-stop"></span>
           Stop
