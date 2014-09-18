@@ -333,16 +333,21 @@ CastPlayer.prototype.onMediaStatusUpdate = function(e) {
  * Increment media current position by 1 second 
  */
 CastPlayer.prototype.incrementMediaTime = function() {
-  if( this.castPlayerState == PLAYER_STATE.PLAYING) {
+  //console.log(this.currentMediaSession);
+  $('#player_current_time').html(this.formatTime(this.currentMediaTime));
+  
+  if (this.currentMediaSession.playerState == PLAYER_STATE.PLAYING){
+  //if( this.castPlayerState == PLAYER_STATE.PLAYING) {
     if( this.currentMediaTime < this.currentMediaDuration ) {
       this.currentMediaTime += 1;
-      $('#player_current_time').html(this.formatTime(this.currentMediaTime));
-    }
-    else {
+      $('#player_seek_range').attr('max', this.currentMediaSession.media.duration);
+	  $('#player_seek_range').val(this.currentMediaTime);
+    } else {
       this.currentMediaTime = 0;
       clearInterval(this.timer);
     }
   }
+  
 };
 
 /**
