@@ -2,16 +2,16 @@
 'use strict';
 
 var DEVICE_STATE = {
-  'IDLE' : 0, 
-  'ACTIVE' : 1, 
-  'WARNING' : 2, 
+  'IDLE' : 0,
+  'ACTIVE' : 1,
+  'WARNING' : 2,
   'ERROR' : 3,
 };
 
 var PLAYER_STATE = {
-  'IDLE' : 'IDLE', 
-  'LOADING' : 'LOADING', 
-  'LOADED' : 'LOADED', 
+  'IDLE' : 'IDLE',
+  'LOADING' : 'LOADING',
+  'LOADED' : 'LOADED',
   'PLAYING' : 'PLAYING',
   'PAUSED' : 'PAUSED',
   'STOPPED' : 'STOPPED',
@@ -22,12 +22,12 @@ var PLAYER_STATE = {
 /**
  * Cast player object
  * main variables:
- *  - deviceState for Cast mode: 
+ *  - deviceState for Cast mode:
  *    IDLE: Default state indicating that Cast extension is installed, but showing no current activity
  *    ACTIVE: Shown when Chrome has one or more local activities running on a receiver
  *    WARNING: Shown when the device is actively being used, but when one or more issues have occurred
- *    ERROR: Should not normally occur, but shown when there is a failure 
- *  - Cast player variables for controlling Cast mode media playback 
+ *    ERROR: Should not normally occur, but shown when there is a failure
+ *  - Cast player variables for controlling Cast mode media playback
  *  - Current media variables for transition between Cast and local modes
  */
 var CastPlayer = function() {
@@ -62,7 +62,7 @@ var CastPlayer = function() {
   this.currentMediaDuration = -1;
   // @type {Timer} A timer for tracking progress of media
   this.timer = null;
-  // @type {Boolean} A boolean to stop timer update of progress when triggered by media status event 
+  // @type {Boolean} A boolean to stop timer update of progress when triggered by media status event
   this.progressFlag = true;
   // @type {Number} A number in milliseconds for minimal progress update
   this.timerStep = 1000;
@@ -74,10 +74,10 @@ var CastPlayer = function() {
 };
 
 /**
- * Initialize Cast media player 
+ * Initialize Cast media player
  * Initializes the API. Note that either successCallback and errorCallback will be
- * invoked once the API has finished initialization. The sessionListener and 
- * receiverListener may be invoked at any time afterwards, and possibly more than once. 
+ * invoked once the API has finished initialization. The sessionListener and
+ * receiverListener may be invoked at any time afterwards, and possibly more than once.
  */
 CastPlayer.prototype.initializeCastPlayer = function() {
 
@@ -118,7 +118,7 @@ CastPlayer.prototype.onError = function() {
  * This handles auto-join when a page is reloaded
  * When active session is detected, playback will automatically
  * join existing session and occur in Cast mode and media
- * status gets synced up with current media of the session 
+ * status gets synced up with current media of the session
  */
 CastPlayer.prototype.sessionListener = function(e) {
   this.session = e;
@@ -163,7 +163,7 @@ CastPlayer.prototype.sessionUpdateListener = function(isAlive) {
 /**
  * Requests that a receiver application session be created or joined. By default, the SessionRequest
  * passed to the API at initialization time is used; this may be overridden by passing a different
- * session request in opt_sessionRequest. 
+ * session request in opt_sessionRequest.
  */
 CastPlayer.prototype.launchApp = function() {
   console.log("launching app...");
@@ -174,7 +174,7 @@ CastPlayer.prototype.launchApp = function() {
 };
 
 /**
- * Callback function for request session success 
+ * Callback function for request session success
  * @param {Object} e A chrome.cast.Session object
  */
 CastPlayer.prototype.onRequestSessionSuccess = function(e) {
@@ -202,7 +202,7 @@ CastPlayer.prototype.stopApp = function() {
 };
 
 /**
- * Callback function for stop app success 
+ * Callback function for stop app success
  */
 CastPlayer.prototype.onStopAppSuccess = function(message) {
   console.log(message);
@@ -309,7 +309,7 @@ CastPlayer.prototype.startProgressTimer = function(callback) {
 };
 
 /**
- * Callback function when media load returns error 
+ * Callback function when media load returns error
  */
 CastPlayer.prototype.onLoadMediaError = function(e) {
   console.log("media error");
@@ -330,19 +330,22 @@ CastPlayer.prototype.onMediaStatusUpdate = function(e) {
 
 /**
  * Helper function
- * Increment media current position by 1 second 
+ * Increment media current position by 1 second
  */
 CastPlayer.prototype.incrementMediaTime = function() {
-  if( this.castPlayerState == PLAYER_STATE.PLAYING) {
+  $('#player_current_time').html(this.formatTime(this.currentMediaTime));
+  if (this.currentMediaSession.playerState == PLAYER_STATE.PLAYING){
     if( this.currentMediaTime < this.currentMediaDuration ) {
       this.currentMediaTime += 1;
       $('#player_current_time').html(this.formatTime(this.currentMediaTime));
-    }
-    else {
+      $('#player_seek_range').attr('max', this.currentMediaSession.media.duration);
+	    $('#player_seek_range').val(this.currentMediaTime);
+    } else {
       this.currentMediaTime = 0;
       clearInterval(this.timer);
     }
   }
+
 };
 
 /**
@@ -353,11 +356,11 @@ CastPlayer.prototype.playMedia = function() {
     return;
   }
 
-  switch( this.castPlayerState ) 
+  switch( this.castPlayerState )
   {
     case PLAYER_STATE.LOADED:
     case PLAYER_STATE.PAUSED:
-      this.currentMediaSession.play(null, 
+      this.currentMediaSession.play(null,
         this.mediaCommandSuccessCallback.bind(this,"playing started for " + this.currentMediaSession.sessionId),
         this.onError.bind(this));
       this.currentMediaSession.addUpdateListener(this.onMediaStatusUpdate.bind(this));
@@ -378,7 +381,7 @@ CastPlayer.prototype.playMedia = function() {
 };
 
 /**
- * Pause media playback 
+ * Pause media playback
  */
 CastPlayer.prototype.pauseMedia = function() {
   if( !this.currentMediaSession ) {
@@ -395,7 +398,7 @@ CastPlayer.prototype.pauseMedia = function() {
 };
 
 /**
- * Stop meia playback 
+ * Stop meia playback
  */
 CastPlayer.prototype.stopMedia = function() {
   if( !this.currentMediaSession ) {
@@ -410,7 +413,7 @@ CastPlayer.prototype.stopMedia = function() {
 };
 
 /**
- * Callback function for media command success 
+ * Callback function for media command success
  */
 CastPlayer.prototype.mediaCommandSuccessCallback = function(info, e) {
   console.log(info);
@@ -450,7 +453,7 @@ CastPlayer.prototype.volumeControl = function(increase, mute) {
 
 /**
  * media seek function
- * @param {Event} e An event object from seek 
+ * @param {Event} e An event object from seek
  */
 CastPlayer.prototype.seekMedia = function(minutes, is_forward) {
   var pos = this.currentMediaTime;
@@ -487,7 +490,7 @@ CastPlayer.prototype.onSeekSuccess = function(info) {
 
 /**
  * Set progressFlag with a timeout of 1 second to avoid UI update
- * until a media status update from receiver 
+ * until a media status update from receiver
  */
 CastPlayer.prototype.setProgressFlag = function() {
   this.progressFlag = true;
