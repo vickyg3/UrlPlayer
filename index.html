@@ -38,6 +38,7 @@
         }
       });
 
+      /* this allows to call the script with url as querystring */
       window.onload=function(){
         if($.getUrlVar("url")){
           $("#url").val( $.getUrlVar("url") );
