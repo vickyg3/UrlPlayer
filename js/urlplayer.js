@@ -33,6 +33,8 @@ function getContentType(url) {
     {ext: 'mp4', type: 'video'},
     {ext: 'm4v', type: 'video'},
     {ext: 'm4a', type: 'audio'},
+    {ext: 'ogg', type: 'audio'},
+    {ext: 'aac', type: 'audio'},
     {ext: 'jpeg', type: 'image'},
     {ext: 'jpg', type: 'image'},
     {ext: 'gif', type: 'image'},
