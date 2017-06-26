@@ -324,6 +324,15 @@ CastPlayer.prototype.onMediaStatusUpdate = function(e) {
   if( e == false ) {
     this.currentMediaTime = 0;
     this.castPlayerState = PLAYER_STATE.IDLE;
+  } else if ( this.currentMediaSession.playerState === chrome.cast.media.PlayerState.PLAYING && this.castPlayerState === PLAYER_STATE.PAUSED ) {
+    console.log("resumed by another client");
+    this.castPlayerState = PLAYER_STATE.PLAYING;
+    this.startProgressTimer(this.incrementMediaTime);
+  } else if ( this.currentMediaSession.playerState === chrome.cast.media.PlayerState.PAUSED && this.castPlayerState !== PLAYER_STATE.PAUSED ) {
+    console.log("paused by another client");
+    this.castPlayerState = PLAYER_STATE.PAUSED;
+    clearInterval(this.timer);
+    this.timer = null;
   }
   console.log("updating media");
 };
