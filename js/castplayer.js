@@ -229,12 +229,14 @@ CastPlayer.prototype.loadMedia = function(mediaUrl, contentType) {
   mediaInfo.metadata = new chrome.cast.media.MovieMediaMetadata();
   mediaInfo.metadata.metadataType = 2;
   mediaInfo.metadata.title = 'Video from URL Player';
-  var request = new chrome.cast.media.LoadRequest(mediaInfo);
-  request.autoplay = this.autoplay;
-  request.currentTime = 0;
+  var item = new chrome.cast.media.QueueItem(mediaInfo);
+  item.autoplay = this.autoplay;
+  item.startTime = 0;
+  var request = new chrome.cast.media.QueueLoadRequest([item]);
+  request.repeatMode = $('#repeat').hasClass('active') ? chrome.cast.media.RepeatMode.ALL : chrome.cast.media.RepeatMode.OFF;
 
   this.castPlayerState = PLAYER_STATE.LOADING;
-  this.session.loadMedia(
+  this.session.queueLoad(
     request,
     this.onMediaDiscovered.bind(this, 'loadMedia'),
     this.onLoadMediaError.bind(this));
@@ -257,6 +259,20 @@ CastPlayer.prototype.formatTime = function(duration) {
     }
   }
   return duration;
+};
+
+/**
+ * Callback function when media queueSetRepeatMode returns error
+ */
+CastPlayer.prototype.onQueueSetRepeatModeSuccess = function() {
+  console.log("queueSetRepeatMode success");
+};
+
+/**
+ * Callback function when media queueSetRepeatMode returns error
+ */
+CastPlayer.prototype.onQueueSetRepeatModeError = function(e) {
+  console.log("queueSetRepeatMode failed");
 };
 
 /**
@@ -334,6 +350,10 @@ CastPlayer.prototype.onMediaStatusUpdate = function(e) {
     clearInterval(this.timer);
     this.timer = null;
   }
+  if ( e == true ) {
+    // this is necessary to reset the time in repeat mode
+    this.currentMediaTime = this.currentMediaSession.currentTime;
+  }
   console.log("updating media");
 };
 
@@ -404,6 +424,20 @@ CastPlayer.prototype.pauseMedia = function() {
       this.onError.bind(this));
     clearInterval(this.timer);
   }
+};
+
+/**
+ * Repeat media playback
+ */
+CastPlayer.prototype.repeatMedia = function(repeat) {
+  if( !this.currentMediaSession ) {
+    return;
+  }
+
+  this.currentMediaSession.queueSetRepeatMode(
+    repeat? chrome.cast.media.RepeatMode.ALL : chrome.cast.media.RepeatMode.OFF,
+    this.onQueueSetRepeatModeSuccess.bind(this),
+    this.onQueueSetRepeatModeError.bind(this));
 };
 
 /**

@@ -66,6 +66,13 @@ function pause() {
   }
 }
 
+function repeat() {
+  if (player.session != null) {
+    // active state here corresponds to *before* the click
+    player.repeatMedia(!$('#repeat').hasClass('active'));
+  }
+}
+
 function resume() {
   if (player.session != null) {
     player.playMedia();
