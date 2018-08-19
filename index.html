@@ -20,31 +20,6 @@
       ga('create', 'UA-42108651-2', 'foamsnet.com');
       ga('send', 'pageview');
     </script>
-    <script type="text/javascript">
-      $.extend({
-        getUrlVars: function(){
-          var vars = [], hash;
-          var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-          for(var i = 0; i < hashes.length; i++)
-          {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = decodeURIComponent(hash[1]);
-          }
-          return vars;
-        },
-        getUrlVar: function(name){
-          return $.getUrlVars()[name];
-        }
-      });
-
-      /* this allows to call the script with url as querystring */
-      window.onload=function(){
-        if($.getUrlVar("url")){
-          $("#url").val( $.getUrlVar("url") );
-        }
-      }
-    </script>
   </head>
   <body>
     <!-- top bar -->

@@ -53,7 +53,7 @@ function startPlayback() {
   if (player.session == null || $('#url').val().trim() == "") {
     return;
   }
-  var url = decodeURIComponent($('#url').val());
+  var url = $('#url').val();
   var contentType = getContentType(url);
   player.loadMedia(url, contentType);
   $('#player_now_playing').html(url.split(/[\\/]/).pop());
